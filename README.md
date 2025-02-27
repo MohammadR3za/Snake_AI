@@ -93,7 +93,7 @@ The agent uses experience replay to improve learning stability, storing experien
 `CMakeLists.txt:` CMake build configuration
 
 ```shell
-## config.txt (example configuration file)
+# config.ini (example configuration file)
 
 exploration_rate=0.1
 discount_factor=0.99

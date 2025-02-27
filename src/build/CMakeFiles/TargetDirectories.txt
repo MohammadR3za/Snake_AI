@@ -1,0 +1,7 @@
+/home/mrm/snake_ai/src/build/CMakeFiles/snake_ai.dir
+/home/mrm/snake_ai/src/build/CMakeFiles/edit_cache.dir
+/home/mrm/snake_ai/src/build/CMakeFiles/rebuild_cache.dir
+/home/mrm/snake_ai/src/build/CMakeFiles/list_install_components.dir
+/home/mrm/snake_ai/src/build/CMakeFiles/install.dir
+/home/mrm/snake_ai/src/build/CMakeFiles/install/local.dir
+/home/mrm/snake_ai/src/build/CMakeFiles/install/strip.dir

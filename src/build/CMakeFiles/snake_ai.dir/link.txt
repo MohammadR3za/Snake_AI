@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/snake_ai.dir/main.cpp.o CMakeFiles/snake_ai.dir/snake.cpp.o CMakeFiles/snake_ai.dir/nn.cpp.o -o snake_ai  -lm

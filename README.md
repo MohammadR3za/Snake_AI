@@ -1,116 +1,124 @@
-# Snake AI with Deep Q-Learning
+# Snake AI with Neural Networks and Genetic Algorithm
 
-This project implements the classic Snake game with three modes:
-1. Manual play (keyboard control)
-2. AI play (watch the trained agent play)
-3. Training mode (train a new agent)
+This project implements an AI for the classic Snake game using neural networks trained with a genetic algorithm.
 
-## Requirements
+## Overview
 
-- C++17 compatible compiler
-- CMake 3.10 or higher
-- ncurses library (for Linux/macOS)
+The Snake AI uses a neural network to control the snake's movement. The network is trained using a genetic algorithm that evolves a population of neural networks over multiple generations to maximize the snake's performance.
+
+## Key Features
+
+- Neural network-controlled snake with configurable architecture
+- Genetic algorithm with advanced selection, crossover, and mutation strategies
+- Improved fitness function that rewards exploration and efficiency
+- Visualization of the best-performing AI
+- Training resumption from saved networks
+- Configurable training parameters
 
 ## Building the Project
 
-```bash
-mkdir build
-cd build
-cmake ..
-make
-```
-## Running the Snake_AI
-Manual Play
-```bash
-./snake_ai --mode=manual
-```
-AI Play (requires a trained model)
-```bash
-./snake_ai --mode=ai --load=snake_model_final.bin
-```
-Training Mode
-```bash
-./snake_ai --mode=train --episodes=10000
-```
-## Command Line Options
+### Prerequisites
 
-`--mode=<mode>:` Game mode (manual, ai, or train)
+- C++17 compatible compiler
+- SDL2 library (for visualization)
+- SDL2_ttf library (for text rendering)
+- CMake (3.10 or higher)
 
-`--width=<width>:` Board width (default: 20)
+### Build Instructions
 
-`--height=<height>:` Board height (default: 15)
+1. Clone the repository:
+   ```bash
+     git clone https://github.com/yourusername/snake-ai.git
+     cd snake-ai
+   ```
+   
+2. Create a build directory
+   ```bash
+   mkdir build
+   cd build
+   ```
 
-`--episodes=<num>:` Number of training episodes (default: 10000)
+3. Configure and build:
+   ```bash
+   cmake
+   make
+   ```
 
-`--steps=<num>:` Max steps per episode (default: 1000)
+## Usage
 
-`--load=<filename>:` Load model from file
+### Training the AI
 
-`--save=<filename>:` Save model to file
+To train a new neural network:
+   ```bash
+  ./snake_ai --train
+  ```
 
-`--config=<filename>:` Load configuration from file
 
-`--help:` Display help message
+With custom parameters:
+  ```bash
+  ./snake_ai --train --population 200 --generations 300 --mutation 0.2 --crossover 0.7
+  ```
 
-## Controls (Manual Mode)
-Arrow keys or WASD: Move snake
+To resume training from a saved network:
+  ```bash
+  ./snake_ai --train --resume --load best_network.bin
+  ```
 
-Q: Quit game
+### Running a Trained AI
 
-## Configuration File Format
-```ini
-exploration_rate=0.1
-discount_factor=0.99
-animation_delay_ms=100
-visualize=true
-```
+To watch a trained AI play:
+  ```bash
+  ./snake_ai --load best_network.bin
+  ```
 
-## How the AI Works
-This implementation uses Deep Q-Learning, a reinforcement learning technique that combines Q-learning with neural networks. The neural network takes the current game state as input and outputs Q-values for each possible action. The agent then selects the action with the highest Q-value.
+### Command Line Options
 
-The state representation includes:
+- `--help`: Show help message
+- `--train`: Train the neural network
+- `--load <file>`: Load a trained neural network from file
+- `--resume`: Resume training from a loaded network
+- `--headless`: Run without graphical output (training only)
+- `--visualize-training`: Show the best individual during training
+- `--grid-width <n>`: Set grid width (default: 20)
+- `--grid-height <n>`: Set grid height (default: 20)
+- `--window-width <n>`: Set window width (default: 800)
+- `--window-height <n>`: Set window height (default: 800)
+- `--delay <ms>`: Set frame delay in milliseconds (default: 50)
+- `--population <n>`: Set population size (default: 200)
+- `--mutation <rate>`: Set mutation rate (default: 0.2)
+- `--crossover <rate>`: Set crossover rate (default: 0.7)
+- `--elite <n>`: Set number of elite individuals (default: 10)
+- `--generations <n>`: Set number of generations (default: 200)
+- `--games <n>`: Set games per individual (default: 5)
+- `--output-dir <dir>`: Set output directory for saved networks
+- `--architecture <sizes>`: Set network architecture (comma-separated layer sizes)
 
-Direction to food (normalized)
-Danger in each direction
-Current direction of the snake
-Food location relative to snake head
-Rewards:
+## Neural Network Architecture
 
-Eating food: +10
-Moving closer to food: +0.1
-Moving away from food: -0.1
-Dying: -10
-Survival: +0.01 per step
-The agent uses experience replay to improve learning stability, storing experiences in a replay buffer and randomly sampling from it during training.
+The default neural network architecture is:
+- Input layer: 16 neurons (snake position, food position, direction to food, danger detection, current direction)
+- Hidden layer 1: 32 neurons
+- Hidden layer 2: 16 neurons
+- Output layer: 4 neurons (up, right, down, left)
 
-## Project Structure
-`main.cpp:` Entry point and command line parsing
+## Genetic Algorithm Parameters
 
-`snake.h/cpp:` Snake game implementation and reinforcement learning logic
+- Population size: 200 individuals
+- Mutation rate: 0.2 (20% chance per weight/bias)
+- Crossover rate: 0.7 (70% chance of crossover between parents)
+- Elite count: 10 (top 10 individuals preserved unchanged)
+- Generations: 200 (training iterations)
 
-`nn.h/cpp:` Neural network implementation
+## Improvements
 
-`CMakeLists.txt:` CMake build configuration
+The key improvements in this version include:
+1. Enhanced fitness function that rewards exploration and efficiency
+2. Adaptive mutation rates based on population diversity
+3. Multiple crossover methods for better genetic diversity
+4. More sophisticated neural network inputs for better decision-making
+5. Larger neural network architecture for more complex behavior
+6. Improved training parameters for faster convergence
 
-```shell
-# config.ini (example configuration file)
+## License
 
-exploration_rate=0.1
-discount_factor=0.99
-animation_delay_ms=100
-visualize=true
-```
-
-```markdown
-This completes the implementation of the Snake AI using Deep Q-Learning. The project includes:
-
-1. A complete Snake game with manual controls
-2. A neural network implementation for deep Q-learning
-3. Reinforcement learning logic with experience replay
-4. Training and inference modes
-5. Model saving/loading functionality
-6. Configuration options
-7. CMake build system
-
-The code is structured to be readable and modular, making it easy to experiment with different neural network architectures, reward functions, and hyperparameters.
-```
+This project is licensed under the MIT License - see the LICENSE file for details.

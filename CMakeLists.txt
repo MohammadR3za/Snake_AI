@@ -1,43 +1,46 @@
 cmake_minimum_required(VERSION 3.10)
-project(SnakeAI VERSION 1.0)
+project(snake_ai)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Add compiler warnings
-if(MSVC)
-    add_compile_options(/W4)
-else()
-    add_compile_options(-Wall -Wextra -pedantic)
-endif()
+# Set output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# Add optimization flags for Release build
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+# Find SDL2 packages
+find_package(SDL2 REQUIRED)
 
-# Source files
-set(SOURCES
-    main.cpp
-    snake.cpp
-    nn.cpp
+# Include directories
+include_directories(
+    ${SDL2_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}
 )
 
-# Header files
-set(HEADERS
-    snake.h
-    nn.h
+# Add source files - based on the error messages
+set(SOURCES
+    main.cpp
+    genetic_algorithm.cpp
+    renderer.cpp
+    neural_network.cpp  # Adding this as it's likely needed
 )
 
 # Create executable
-add_executable(snake_ai ${SOURCES} ${HEADERS})
+add_executable(snake_ai ${SOURCES})
 
-# Find and link required libraries
-target_link_libraries(snake_ai m)
+# Link libraries
+target_link_libraries(snake_ai
+    ${SDL2_LIBRARIES}
+    SDL2_ttf  # Direct linking to SDL2_ttf
+)
 
-# Copy configuration file to build directory
-configure_file(config.ini ${CMAKE_BINARY_DIR}/config.ini COPYONLY)
+# If the above SDL2_ttf linking doesn't work, try this alternative:
+# target_link_libraries(snake_ai
+#     ${SDL2_LIBRARIES}
+#     -lSDL2_ttf
+# )
 
-# Install target
+# Install
 install(TARGETS snake_ai DESTINATION bin)
-install(FILES config.ini DESTINATION share/snake_ai)

@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     // Default parameters
     std::string mode = "play";
     std::string model_file = "";
-    int width = 20;
+    int width = 60;
     int height = 20;
     int population_size = 100;
     int generations = 100;

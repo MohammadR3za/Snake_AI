@@ -10,21 +10,21 @@
 
 class PlayMode {
 public:
-    PlayMode(int width = 20, int height = 20);
-    ~PlayMode();
-    
-    void human_play();
-    void ai_play(const std::string& model_file);
-    
+  PlayMode(int width = 20, int height = 20);
+  ~PlayMode();
+
+  void human_play();
+  void ai_play(const std::string& model_file);
+
 private:
-    int width;
-    int height;
-    WINDOW* window;
-    
-    void initialize_ncurses();
-    void cleanup_ncurses();
-    void draw_game(const Game& game);
-    Direction get_human_input(Direction current_dir);
+  int width;
+  int height;
+  WINDOW* window;
+
+  void initialize_ncurses();
+  void cleanup_ncurses();
+  void draw_game(const Game& game);
+  Direction get_human_input(Direction current_dir);
 };
 
 #endif // PLAY_MODE_H

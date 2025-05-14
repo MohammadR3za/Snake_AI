@@ -305,21 +305,21 @@ double SnakeGame::calculateReward() const {
 
   // If game over, large negative reward
   if (gameOver) {
-    return -100.0;
+    return -1.0;
   }
 
   // If food eaten, large positive reward
   if (snake.size() > 1 && snake[0].first == food.first &&
       snake[0].second == food.second) {
-    return 100.0;
+    return 1.0;
   }
 
   // Small reward for getting closer to food
   double currentDistance = getDistanceToFood();
   if (currentDistance < prevDistanceToFood) {
-    reward += 10.0;
+    reward += 0.15;
   } else {
-    reward -= 10.0;
+    reward -= 0.25;
   }
   return reward;
 }

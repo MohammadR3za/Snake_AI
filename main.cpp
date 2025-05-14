@@ -7,11 +7,11 @@
 #include <thread>
 
 // Constants for RL
-const double LEARNING_RATE = 0.05;
-const double DISCOUNT_FACTOR = 0.95;
+const double LEARNING_RATE = 0.1;
+const double DISCOUNT_FACTOR = 0.90;
 const double EXPLORATION_RATE_START = 1.0;
 const double EXPLORATION_RATE_END = 0.01;
-const int EXPLORATION_DECAY_STEPS = 10000;
+const int EXPLORATION_DECAY_STEPS = 15000;
 const std::string WEIGHTS_FILE = "snake_ai_weights.bin";
 
 // Function to train the neural network
@@ -19,7 +19,7 @@ void trainAI(int episodes) {
   // Create neural network with topology: input_size -> hidden_size ->
   // output_size Input: 8 neurons (see SnakeGame::getGameState()) Hidden: 16
   // neurons Output: 4 neurons (UP, RIGHT, DOWN, LEFT)
-  NeuralNetwork nn({8, 32, 4});
+  NeuralNetwork nn({8, 16, 4});
 
   std::random_device rd;
   std::mt19937_64 rng(rd());
@@ -45,10 +45,10 @@ void trainAI(int episodes) {
     double totalReward = 0.0;
 
     // Print episode start
-    clear(); // Clear the screen
-    mvprintw(23, 0, "Training Episode %d of %d (Exploration Rate: %.2f)",
-             episode + 1, episodes, exploration_rate);
-    refresh();
+    // clear(); // Clear the screen
+    // mvprintw(23, 0, "Training Episode %d of %d (Exploration Rate: %.2f)",
+    //         episode + 1, episodes, exploration_rate);
+    // refresh();
     int lastScore = game.getScore();
     // Game loop for this episode
     while (!game.isGameOver()) {
@@ -90,15 +90,13 @@ void trainAI(int episodes) {
 
       // Calculate reward
       double reward = game.calculateReward();
-
-      if (lastScore < game.getScore()) {
+      if (reward == 1.0) {
         lastScore = game.getScore();
       }
 
-      if (steps % 50 == 0 && lastScore == game.getScore()) {
-        reward += -100.0;
+      if (steps % 100 == 0 && lastScore == game.getScore()) {
+        reward += -1.0;
       }
-
       totalReward += reward;
       // Get new state
       std::vector<double> newState = game.getGameState();
@@ -140,15 +138,15 @@ void trainAI(int episodes) {
              "Episode %d complete: Steps = %d, Score = %d, Total Reward = %.2f "
              "Error: %lf",
              episode + 1, steps, game.getScore(), totalReward, nn.getError());
-    refresh();
-    std::this_thread::sleep_for(
-        std::chrono::milliseconds(50)); // Pause between episodes
+    // refresh();
+    // std::this_thread::sleep_for(
+    //     std::chrono::milliseconds(50)); // Pause between episodes
 
     // Save weights every 5 episodes (more frequent for small training runs)
     if (episode % 5 == 0 && episode > 0) {
       nn.saveWeights(WEIGHTS_FILE);
-      mvprintw(3, 1, "Weights saved to %s", WEIGHTS_FILE.c_str());
-      refresh();
+      // mvprintw(3, 1, "Weights saved to %s", WEIGHTS_FILE.c_str());
+      // refresh();
     }
   }
 
@@ -171,7 +169,7 @@ training_end:
 // Function to let AI play the game
 void aiPlay() {
   // Create neural network with same topology
-  NeuralNetwork nn({8, 32, 4});
+  NeuralNetwork nn({8, 16, 4});
 
   // Load trained weights
   if (!nn.loadWeights(WEIGHTS_FILE)) {
